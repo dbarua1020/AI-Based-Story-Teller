@@ -1,0 +1,42 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Story Teller</title>
+    <link rel="icon" type="image/x-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgj4hteqbOnnxlYWdlFN3Q6ztMUHci8TRpgQ&s">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.3/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-12">
+        <h1 class="text-4xl font-bold text-center mb-8">AI-Based Story Teller</h1>
+        <div class="max-w-md mx-auto bg-white p-8 shadow-lg rounded-lg">
+            <form id="story-form">
+                <label for="prompt" class="block text-lg font-semibold mb-2">Enter your story theme or prompt:</label>
+                <input type="text" id="prompt" name="prompt" class="w-full border border-gray-300 p-2 mb-4" required>
+                <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Generate Story</button>
+            </form>
+            <div id="result" class="mt-8 p-4 bg-gray-200 rounded"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('story-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+            const response = await fetch('/generate_story', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'prompt': prompt
+                })
+            });
+            const data = await response.json();
+            document.getElementById('result').innerHTML = `<h3 class="text-lg font-semibold">Generated Story:</h3><p>${data.story}</p>`;
+        });
+    </script>
+</body>
+</html>
